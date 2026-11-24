@@ -1,0 +1,462 @@
+<Schema name="LaMarcaTrasporti">
+  <Cube name="Rapportini" visible="true" cache="true" enabled="true">
+    <Table name="ft_rapportino">
+    </Table>
+    <Dimension type="StandardDimension" visible="true" foreignKey="id_autista" highCardinality="false" name="Autisti">
+      <Hierarchy name="Et&#224;Assunzione" visible="true" hasAll="true" primaryKey="id">
+        <Table name="dt_autista">
+        </Table>
+        <Level name="Et&#224;Assunzione" visible="true" column="eta_assunzione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="DataAssunzione" visible="true" hasAll="true" primaryKey="id" primaryKeyTable="dt_autista">
+        <Join leftKey="id" rightKey="id">
+          <Table name="dt_autista">
+          </Table>
+          <Table name="dt_date_rapportino">
+          </Table>
+        </Join>
+        <Level name="DataAssunzione" visible="true" table="dt_date_rapportino" column="data_rapportino" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="id_gruppo" highCardinality="false" name="Gruppo">
+      <Hierarchy name="rifornimento" visible="true" hasAll="true" primaryKey="id_rifornimento" primaryKeyTable="bridge_table_rapportino">
+        <Join leftKey="id_gruppo" rightKey="data_rifornimento">
+          <Table name="bridge_table_rapportino">
+          </Table>
+          <Table name="dt_rifornimento">
+          </Table>
+        </Join>
+        <Level name="quantit&#224;Rifornimento" visible="true" table="dt_rifornimento" column="quantit&#224;Rifornita" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="prezzo" visible="true" table="dt_rifornimento" column="prezzo" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="id_mezzo" highCardinality="false" name="Mezzo">
+      <Hierarchy name="ChilometriMezzo" visible="true" hasAll="true" primaryKey="id">
+        <Table name="dt_mezzo">
+        </Table>
+        <Level name="ChilometriMezzo" visible="true" column="chilometri_mezzo" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="NumeroViaggi" visible="true" hasAll="true" primaryKey="id">
+        <Table name="dt_mezzo">
+        </Table>
+        <Level name="NumeroViaggi" visible="true" column="numero_viaggi" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="Data" visible="true" hasAll="true" primaryKey="id" primaryKeyTable="dt_mezzo">
+        <Join leftKey="id" rightKey="id">
+          <Table name="dt_mezzo">
+          </Table>
+          <Table name="dt_date_rapportino">
+          </Table>
+        </Join>
+        <Level name="DataImmatricolazione" visible="true" table="dt_date_rapportino" column="data_rapportino" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="SpeseMezzo" visible="true" hasAll="true" primaryKey="id_speseMezzo">
+        <Table name="dt_speseMezzo">
+        </Table>
+        <Level name="compagnia assicurativa" visible="true" column="compagnia_assicurativa" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Importo Assicurazione" visible="true" column="importo_assicurazione" type="Numeric" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="importo bollo" visible="true" column="importo_bollo" type="Numeric" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="data revisione" visible="true" column="id_data_revisione" type="Numeric" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="esito revisione" visible="true" column="esito_revisione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="importo revisione" visible="true" column="importo_revisione" type="Numeric" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="id_data_partenza" highCardinality="false" name="DataRapportino">
+      <Hierarchy name="Giorno Data" visible="true" hasAll="true" primaryKey="id">
+        <Table name="dt_date_rapportino">
+        </Table>
+        <Level name="Giorno" visible="true" column="giorno" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Data" visible="true" column="data_rapportino" nameColumn="data_rapportino" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="Mese Giorno" visible="true" hasAll="true" primaryKey="id">
+        <Table name="dt_date_rapportino">
+        </Table>
+        <Level name="Mese" visible="true" column="mese" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Giorno" visible="true" column="giorno" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="Anno Mese" visible="true" hasAll="true" primaryKey="id">
+        <Table name="dt_date_rapportino">
+        </Table>
+        <Level name="Anno" visible="true" column="anno" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Mese" visible="true" column="mese" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Measure name="NumRapportini Sum" column="numRapportini" datatype="Numeric" aggregator="sum" visible="true">
+    </Measure>
+    <Measure name="ChilometriMezzo Avg" column="chilometriPercorsi" datatype="Numeric" aggregator="avg" visible="true">
+    </Measure>
+    <Measure name="DurataViaggio Avg" column="durataViaggio" datatype="Integer" aggregator="avg" visible="true">
+    </Measure>
+    <Measure name="NumRapportini MIN" column="numRapportini" aggregator="min" visible="true">
+    </Measure>
+    <Measure name="NumRapportini Max" column="numRapportini" aggregator="max" visible="true">
+    </Measure>
+    <Measure name="ChilometriMezzo Min" column="chilometriPercorsi" aggregator="min" visible="true">
+    </Measure>
+    <Measure name="ChilometriMezzo Max" column="chilometriPercorsi" aggregator="max" visible="true">
+    </Measure>
+    <Measure name="DurataViaggio Min" column="durataViaggio" aggregator="min" visible="true">
+    </Measure>
+    <Measure name="DurataViaggio Max" column="durataViaggio" aggregator="max" visible="true">
+    </Measure>
+  </Cube>
+  <Cube name="Itinerario" visible="true" cache="true" enabled="true">
+    <Table name="ft_itinerario">
+    </Table>
+    <Dimension type="StandardDimension" visible="true" foreignKey="id_puntoCarico" highCardinality="false" name="PuntoCarico">
+      <Hierarchy name="PuntoCarico citt&#224;" visible="true" hasAll="true" primaryKey="id_puntoCaricoScarico">
+        <Table name="dt_PuntoCaricoScarico">
+        </Table>
+        <Level name="Citt&#224;" visible="true" column="Citt&#224;" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="puntocarico" visible="true" column="puntoCaricoScarico" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="regione citta" visible="true" hasAll="true" primaryKey="id_puntoCaricoScarico">
+        <Table name="dt_PuntoCaricoScarico">
+        </Table>
+        <Level name="regione" visible="true" column="Regione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="citt&#224;" visible="true" column="Citt&#224;" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="nazione regione" visible="true" hasAll="true" primaryKey="id_puntoCaricoScarico">
+        <Table name="dt_PuntoCaricoScarico">
+        </Table>
+        <Level name="nazione" visible="true" column="Nazione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="regione" visible="true" column="Regione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="id_puntoScarico" highCardinality="false" name="PuntoScarico">
+      <Hierarchy name="PuntoScarico Citt&#224;" visible="true" hasAll="true" primaryKey="id_puntoCaricoScarico">
+        <Table name="dt_PuntoCaricoScarico">
+        </Table>
+        <Level name="citt&#224;" visible="true" column="Citt&#224;" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="punto scarico" visible="true" column="puntoCaricoScarico" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="regione citt&#224;" visible="true" hasAll="true" primaryKey="id_puntoCaricoScarico">
+        <Table name="dt_PuntoCaricoScarico">
+        </Table>
+        <Level name="regione" visible="true" column="Regione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="citt&#224;" visible="true" column="Citt&#224;" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="nazione regione" visible="true" hasAll="true" primaryKey="id_puntoCaricoScarico">
+        <Table name="dt_PuntoCaricoScarico">
+        </Table>
+        <Level name="nazione" visible="true" column="Nazione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="regione" visible="true" column="Regione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="id_data" highCardinality="false" name="date itinerario">
+      <Hierarchy name="giorno data" visible="true" hasAll="true" primaryKey="id_data">
+        <Table name="dt_data_itinerario">
+        </Table>
+        <Level name="giorno" visible="true" column="giorno" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="data" visible="true" column="data" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="mese giorno" visible="true" hasAll="true" primaryKey="id_data">
+        <Table name="dt_data_itinerario">
+        </Table>
+        <Level name="mese" visible="true" column="mese" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="giorno" visible="true" column="giorno" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="anno mese" visible="true" hasAll="true" primaryKey="id_data">
+        <Table name="dt_data_itinerario">
+        </Table>
+        <Level name="anno" visible="true" column="anno" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="mese" visible="true" column="mese" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="id_clienteAzienda" highCardinality="false" name="cliente azienda">
+      <Hierarchy name="data fine rapporto " visible="true" hasAll="true" primaryKey="id_dataFineRapporto" primaryKeyTable="dt_clienteAzienda">
+        <Join leftKey="data_itienerario" rightKey="cliente azienda">
+          <Table name="dt_clienteAzienda">
+          </Table>
+          <Table name="dt_data_itinerario">
+          </Table>
+        </Join>
+        <Level name="data" visible="true" table="dt_data_itinerario" column="data" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="data inizio rapporto" visible="true" hasAll="true" primaryKey="id_dataFineRapporto" primaryKeyTable="dt_clienteAzienda">
+        <Join leftKey="data_itinerario" rightKey="cliente azienda">
+          <Table name="dt_data_itinerario">
+          </Table>
+          <Table name="dt_clienteAzienda">
+          </Table>
+        </Join>
+        <Level name="data" visible="true" table="dt_data_itinerario" column="data" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="sede citt&#224;" visible="true" hasAll="true" primaryKey="id_sede">
+        <Table name="dt_sede_itinerario">
+        </Table>
+        <Level name="citt&#224;" visible="true" column="citt&#224;" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="sede" visible="true" column="sede" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="regione citt&#224;" visible="true" hasAll="true" primaryKey="id_sede">
+        <Table name="dt_sede_itinerario">
+        </Table>
+        <Level name="regione" visible="true" column="regione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="citt&#224;" visible="true" column="citt&#224;" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="nazione regione" visible="true" hasAll="true" primaryKey="id_sede">
+        <Table name="dt_sede_itinerario">
+        </Table>
+        <Level name="nazione" visible="true" column="nazione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="regione" visible="true" column="regione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="sede obbligatoria" visible="true" hasAll="true" primaryKey="id_sedeObbligatoria" primaryKeyTable="dt_clienteAzienda">
+        <Join leftKey="sede obbligatoria" rightKey="cliente azienda">
+          <Table name="dt_sede_itinerario">
+          </Table>
+          <Table name="dt_clienteAzienda">
+          </Table>
+        </Join>
+        <Level name="sede obbligatoria" visible="true" table="dt_sede_itinerario" column="sede" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="sede facoltativa" visible="true" hasAll="true" primaryKey="id_sedeFacoltativa" primaryKeyTable="dt_clienteAzienda">
+        <Join leftKey="sede" rightKey="cliente azienda">
+          <Table name="dt_sede_itinerario">
+          </Table>
+          <Table name="dt_clienteAzienda">
+          </Table>
+        </Join>
+        <Level name="sede facoltativa" visible="true" table="dt_sede_itinerario" column="id_sede" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="id_clientePrivato" highCardinality="false" name="cliente privato">
+      <Hierarchy name="sede" visible="true" hasAll="true" primaryKey="id_sede" primaryKeyTable="dt_clientePrivato">
+        <Join leftKey="sede" rightKey="cliente privato">
+          <Table name="dt_sede_itinerario">
+          </Table>
+          <Table name="dt_clientePrivato">
+          </Table>
+        </Join>
+        <Level name="sede" visible="true" table="dt_sede_itinerario" column="sede" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="data inizio rapporto" visible="true" hasAll="true" primaryKey="id_dataInizioRapporto" primaryKeyTable="dt_clientePrivato">
+        <Join leftKey="data itinerario" rightKey="cliente privato">
+          <Table name="dt_data_itinerario">
+          </Table>
+          <Table name="dt_clientePrivato">
+          </Table>
+        </Join>
+        <Level name="data" visible="true" table="dt_data_itinerario" column="data" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="data fine rapporto" visible="true" hasAll="true" primaryKey="id_dataFineRapporto" primaryKeyTable="dt_clientePrivato">
+        <Join leftKey="data itinerario" rightKey="cliente privato">
+          <Table name="dt_data_itinerario">
+          </Table>
+          <Table name="dt_clientePrivato">
+          </Table>
+        </Join>
+        <Level name="data" visible="true" table="dt_data_itinerario" column="data" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Measure name="NumItinerario Sum" column="numItinerario" aggregator="sum" visible="true">
+    </Measure>
+    <Measure name="durataItinerario Avg" column="durataItinerario" aggregator="avg" visible="true">
+    </Measure>
+    <Measure name="NumItinerario Min" column="numItinerario" aggregator="min" visible="true">
+    </Measure>
+    <Measure name="NumItinerario Max" column="numItinerario" aggregator="max" visible="true">
+    </Measure>
+    <Measure name="durataItinerario Min" column="durataItinerario" aggregator="min" visible="true">
+    </Measure>
+    <Measure name="durataItinerario Max" column="durataItinerario" aggregator="max" visible="true">
+    </Measure>
+  </Cube>
+  <Cube name="PrelievoCisterna" visible="true" cache="true" enabled="true">
+    <Table name="ft_prelievoCisterna">
+    </Table>
+    <Dimension type="StandardDimension" visible="true" foreignKey="luogoPrelievo" highCardinality="false" name="LuogoPrelievo">
+      <Hierarchy name="luogoPrelievo" visible="true" hasAll="true" primaryKey="luogoPrelievo">
+        <Table name="ft_prelievoCisterna">
+        </Table>
+        <Level name="luogo prelievo" visible="true" column="luogoPrelievo" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="codiceCisterna" highCardinality="false" name="codice cisterna">
+      <Hierarchy name="codice cisterna" visible="true" hasAll="true" primaryKey="codiceCisterna">
+        <Table name="ft_prelievoCisterna">
+        </Table>
+        <Level name="codice cisterna" visible="true" column="codiceCisterna" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="id_dataPrelievo" highCardinality="false" name="data">
+      <Hierarchy name="giorno data" visible="true" hasAll="true" primaryKey="id_data">
+        <Table name="dt_data_prelievoCisterna">
+        </Table>
+        <Level name="giorno" visible="true" column="giorno" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="data" visible="true" column="data" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="mese giorno" visible="true" hasAll="true" primaryKey="id_data">
+        <Table name="dt_data_prelievoCisterna">
+        </Table>
+        <Level name="mese" visible="true" column="mese" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="giorno" visible="true" column="giorno" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="anno mese" visible="true" hasAll="true" primaryKey="id_data">
+        <Table name="dt_data_prelievoCisterna">
+        </Table>
+        <Level name="anno" visible="true" column="anno" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="mese" visible="true" column="mese" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="id_rifornimentoCisterna" highCardinality="false" name="rifornimentoCisterna">
+      <Hierarchy name="quotazione al litro" visible="true" hasAll="true" primaryKey="id_rifornimentoCisterna">
+        <Table name="dt_rifornimentoCisterna">
+        </Table>
+        <Level name="quotazione al litro" visible="true" column="quotazioneAlLitro" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="quantit&#224; rifornita" visible="true" hasAll="true" primaryKey="id_rifornimentoCisterna">
+        <Table name="dt_rifornimentoCisterna">
+        </Table>
+        <Level name="quantit&#224; rifornita" visible="true" column="quantit&#224;Rifornita" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="prezzo totale" visible="true" hasAll="true" primaryKey="id_rifornimentoCisterna">
+        <Table name="dt_rifornimentoCisterna">
+        </Table>
+        <Level name="prezzo totale" visible="true" column="prezzoTotale" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="fornitore tipologia" visible="true" hasAll="true" primaryKey="id_rifornimentoCisterna">
+        <Table name="dt_rifornimentoCisterna">
+        </Table>
+        <Level name="tipologia" visible="true" column="tipologia" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="fornitore" visible="true" column="fornitore" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="citt&#224; sede" visible="true" hasAll="true" primaryKey="id_sede">
+        <Table name="dt_sede_prelievoCisterna">
+        </Table>
+        <Level name="citt&#224;" visible="true" column="citt&#224;" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="sede" visible="true" column="sede" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="regione citt&#224;" visible="true" hasAll="true" primaryKey="id_sede">
+        <Table name="dt_sede_prelievoCisterna">
+        </Table>
+        <Level name="regione" visible="true" column="regione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="citt&#224;" visible="true" column="citt&#224;" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="nazione regione" visible="true" hasAll="true" primaryKey="id_sede">
+        <Table name="dt_sede_prelievoCisterna">
+        </Table>
+        <Level name="nazione" visible="true" column="nazione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="regione" visible="true" column="regione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="fornitore sede obbligatoria" visible="true" hasAll="true" primaryKey="id_rifornimentoCisterna" primaryKeyTable="dt_rifornimentoCisterna">
+        <Join leftKey="id_sede" rightKey="id_rifornimentoCisterna">
+          <Table name="dt_sede_prelievoCisterna">
+          </Table>
+          <Table name="dt_rifornimentoCisterna">
+          </Table>
+        </Join>
+        <Level name="sede obbligatoria" visible="true" table="dt_rifornimentoCisterna" column="id_sedeObbligatoria" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="fornitore" visible="true" table="dt_rifornimentoCisterna" column="fornitore" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="fornitore sede facoltativa" visible="true" hasAll="true" primaryKey="id_rifornimentoCisterna" primaryKeyTable="dt_rifornimentoCisterna">
+        <Join leftKey="id_sede" rightKey="id_rifornimentoCisterna">
+          <Table name="dt_sede_prelievoCisterna">
+          </Table>
+          <Table name="dt_rifornimentoCisterna">
+          </Table>
+        </Join>
+        <Level name="sede facoltativa" visible="true" table="dt_rifornimentoCisterna" column="id_sedeFacoltativa" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="fornitore" visible="true" table="dt_rifornimentoCisterna" column="fornitore" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="id_rifornimentoCisterna" highCardinality="false" name="gruppo">
+      <Hierarchy name="fattura" visible="true" hasAll="true" primaryKey="fattura" primaryKeyTable="bridge_table_prelievo_cisterna">
+        <Join leftKey="id_gruppo" rightKey="fattura">
+          <Table name="bridge_table_prelievo_cisterna">
+          </Table>
+          <Table name="dt_fatture">
+          </Table>
+        </Join>
+        <Level name="importo" visible="true" table="dt_fatture" column="importo" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="data emissione" visible="true" table="dt_fatture" column="emissione" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Measure name="numPrelievoCisterna Sum" column="numPrelievoCisterna" aggregator="sum" visible="true">
+    </Measure>
+    <Measure name="quantit&#224;Prelevata Sum" column="quantit&#224;Prelevata" aggregator="sum" visible="true">
+    </Measure>
+    <Measure name="numPrelievoCisterna Min" column="numPrelievoCisterna" aggregator="min" visible="true">
+    </Measure>
+    <Measure name="numPrelievoCisterna Max" column="numPrelievoCisterna" aggregator="max" visible="true">
+    </Measure>
+    <Measure name="quantit&#224;Prelevata Min" column="quantit&#224;Prelevata" aggregator="min" visible="true">
+    </Measure>
+    <Measure name="quantit&#224;Prelevata Max" column="quantit&#224;Prelevata" aggregator="max" visible="true">
+    </Measure>
+  </Cube>
+</Schema>

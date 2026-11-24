@@ -1,0 +1,105 @@
+-- ****************************************************
+-- *             dt_sede_prelievoCisterna             *
+-- ****************************************************
+create table dt_sede_prelievoCisterna (
+   id_sede   INTEGER(11) not null,
+   sede      BIGINT(20),
+   tipologia VARCHAR(9),
+   città     VARCHAR(17),
+   regione   VARCHAR(14),
+   nazione   VARCHAR(7),
+   constraint PK_dt_sede_prelievoCisterna primary key (id_sede)
+);
+
+
+-- ****************************************************
+-- *                    dt_fatture                    *
+-- ****************************************************
+create table dt_fatture (
+   fattura   BIGINT(20) not null,
+   importo   BIGINT(20),
+   emissione DATE,
+   constraint PK_dt_fatture primary key (fattura)
+);
+
+
+-- ****************************************************
+-- *             dt_data_prelievoCisterna             *
+-- ****************************************************
+create table dt_data_prelievoCisterna (
+   id_data INTEGER(11) not null,
+   data    DATE,
+   giorno  INTEGER(11),
+   mese    INTEGER(11),
+   anno    INTEGER(11),
+   constraint PK_dt_data_prelievoCisterna primary key (id_data)
+);
+
+
+-- ****************************************************
+-- *          bridge_table_prelievo_cisterna          *
+-- ****************************************************
+create table bridge_table_prelievo_cisterna (
+   id_gruppo INTEGER(11) not null,
+   fattura   BIGINT(20) not null,
+   peso      DOUBLE,
+   gruppo    BIGINT(203),
+   constraint PK_bridge_table_prelievo_cisterna primary key (id_gruppo)
+);
+
+alter table bridge_table_prelievo_cisterna
+   add constraint fattura_bridge
+   foreign key (fattura) references dt_fatture (fattura);
+
+
+-- ****************************************************
+-- *              dt_rifornimentoCisterna             *
+-- ****************************************************
+create table dt_rifornimentoCisterna (
+   id_rifornimentoCisterna INTEGER(11) not null,
+   quotazioneAlLitro       BIGINT(20),
+   quantitàRifornita       BIGINT(20),
+   prezzoTotale            BIGINT(20),
+   fornitore               BIGINT(20),
+   id_sedeObbligatoria     INTEGER(11),
+   id_sedeFacoltativa      INTEGER(11),
+   tipologia               VARCHAR(10),
+   id_gruppo               INTEGER(11),
+   constraint PK_dt_rifornimentoCisterna primary key (id_rifornimentoCisterna)
+);
+
+alter table dt_rifornimentoCisterna
+   add constraint bridge
+   foreign key (id_gruppo) references bridge_table_prelievo_cisterna (id_gruppo);
+
+alter table dt_rifornimentoCisterna
+   add constraint sedeObb
+   foreign key (id_sedeObbligatoria) references dt_sede_prelievoCisterna (id_sede);
+
+alter table dt_rifornimentoCisterna
+   add constraint sedeFac
+   foreign key (id_sedeFacoltativa) references dt_sede_prelievoCisterna (id_sede);
+
+
+-- ****************************************************
+-- *                ft_prelievoCisterna               *
+-- ****************************************************
+create table ft_prelievoCisterna (
+   luogoPrelievo           VARCHAR(10) not null,
+   codiceCisterna          BIGINT(20) not null,
+   id_rifornimentoCisterna INTEGER(11) not null,
+   id_dataPrelievo         INTEGER(11) not null,
+   numPrelievoCisterna     INTEGER(11),
+   quantitàPrelevata       BIGINT(20),
+   constraint PK_ft_prelievoCisterna primary key (luogoPrelievo, codiceCisterna, id_rifornimentoCisterna, id_dataPrelievo)
+);
+
+alter table ft_prelievoCisterna
+   add constraint pre_rif
+   foreign key (id_rifornimentoCisterna) references dt_rifornimentoCisterna (id_rifornimentoCisterna);
+
+alter table ft_prelievoCisterna
+   add constraint data_ft
+   foreign key (id_dataPrelievo) references dt_data_prelievoCisterna (id_data);
+
+

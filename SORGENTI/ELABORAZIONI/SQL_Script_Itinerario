@@ -1,0 +1,132 @@
+-- ****************************************************
+-- *                dt_data_itinerario                *
+-- ****************************************************
+create table dt_data_itinerario (
+   id_data INTEGER(11) not null,
+   data    DATE,
+   giorno  INTEGER(11),
+   mese    INTEGER(11),
+   anno    INTEGER(11),
+   constraint PK_dt_data_itinerario primary key (id_data)
+);
+
+
+-- ****************************************************
+-- *                      dt_sede                     *
+-- ****************************************************
+create table dt_sede (
+   id_sede   INTEGER(11) not null,
+   sede      BIGINT(20),
+   tipologia VARCHAR(9),
+   città     VARCHAR(17),
+   regione   VARCHAR(14),
+   nazione   VARCHAR(7),
+   constraint PK_dt_sede primary key (id_sede)
+);
+
+
+-- ****************************************************
+-- *               dt_PuntoCaricoScarico              *
+-- ****************************************************
+create table dt_PuntoCaricoScarico (
+   id_puntoCaricoScarico INTEGER not null,
+   puntoCaricoScarico    BIGINT(20),
+   Città                 VARCHAR(17),
+   Regione               VARCHAR(14),
+   Nazione               VARCHAR(7),
+   Descrizione           VARCHAR(61),
+   constraint PK_dt_PuntoCaricoScarico primary key (id_puntoCaricoScarico)
+);
+
+
+-- ****************************************************
+-- *                 dt_clientePrivato                *
+-- ****************************************************
+create table dt_clientePrivato (
+   id_clientePrivato     INTEGER(11) not null,
+   clientePrivato        BIGINT(20),
+   id_dataInizioRapporto INTEGER(11),
+   id_dataFineRapporto   INTEGER(11),
+   id_sede               INTEGER(11),
+   constraint PK_dt_clientePrivato primary key (id_clientePrivato)
+);
+
+alter table dt_clientePrivato
+   add constraint sede_privato
+   foreign key (id_sede) references dt_sede (id_sede);
+
+alter table dt_clientePrivato
+   add constraint datainizio_privato_data
+   foreign key (id_dataInizioRapporto) references dt_data_itinerario (id_data);
+
+alter table dt_clientePrivato
+   add constraint datafine_privato_data
+   foreign key (id_dataFineRapporto) references dt_data_itinerario (id_data);
+
+
+-- ****************************************************
+-- *                 dt_clienteAzienda                *
+-- ****************************************************
+create table dt_clienteAzienda (
+   id_clienteAzienda     INTEGER(11) not null,
+   clienteAzienda        BIGINT(20),
+   id_dataInizioRapporto INTEGER(11),
+   id_dataFineRapporto   INTEGER(11),
+   id_sedeObbligatoria   INTEGER(11),
+   id_sedeFacoltativa    INTEGER,
+   constraint PK_dt_clienteAzienda primary key (id_clienteAzienda)
+);
+
+alter table dt_clienteAzienda
+   add constraint sede_azienda
+   foreign key (id_sedeObbligatoria) references dt_sede (id_sede);
+
+alter table dt_clienteAzienda
+   add constraint inizioRapporto_data
+   foreign key (id_dataInizioRapporto) references dt_data_itinerario (id_data);
+
+alter table dt_clienteAzienda
+   add constraint fineRapporto_data
+   foreign key (id_dataFineRapporto) references dt_data_itinerario (id_data);
+
+alter table dt_clienteAzienda
+   add constraint sedeobb_sede
+   foreign key (id_sedeFacoltativa) references dt_sede (id_sede);
+
+
+-- ****************************************************
+-- *                   ft_itinerario                  *
+-- ****************************************************
+create table ft_itinerario (
+   id_puntoCarico     INTEGER(11) not null,
+   id_puntoScarico    INTEGER(11) not null,
+   id_clientePrivato  INTEGER(11) ,
+   id_clienteAzienda  INTEGER(11) ,
+   id_data            INTEGER(11) not null,
+   descrizioneViaggio VARCHAR(20),
+   numItinerario      INTEGER(11),
+   durataItinerario   INTEGER(11),
+   constraint PK_ft_itinerario primary key (id_puntoCarico, id_puntoScarico, id_clientePrivato, id_clienteAzienda, id_data)
+);
+
+alter table ft_itinerario
+   add constraint it_clienteAzienda
+   foreign key (id_clienteAzienda) references dt_clienteAzienda (id_clienteAzienda);
+
+alter table ft_itinerario
+   add constraint it_privato
+   foreign key (id_clientePrivato) references dt_clientePrivato (id_clientePrivato);
+
+alter table ft_itinerario
+   add constraint it_data
+   foreign key (id_data) references dt_data_itinerario (id_data);
+
+alter table ft_itinerario
+   add constraint it_puntocarico
+   foreign key (id_puntoCarico) references dt_PuntoCaricoScarico (id_puntoCaricoScarico);
+
+alter table ft_itinerario
+   add constraint it_puntoScarico
+   foreign key (id_puntoScarico) references dt_PuntoCaricoScarico (id_puntoCaricoScarico);
+
+

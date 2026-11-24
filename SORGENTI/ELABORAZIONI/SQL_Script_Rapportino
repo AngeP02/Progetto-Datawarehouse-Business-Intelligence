@@ -1,0 +1,132 @@
+-- ****************************************************
+-- *                dt_date_rapportino                *
+-- ****************************************************
+create table dt_date_rapportino (
+   id              INTEGER not null,
+   data_rapportino DATE,
+   giorno          INTEGER,
+   mese            INTEGER,
+   anno            INTEGER,
+   constraint PK_dt_data primary key (id)
+);
+
+
+-- ****************************************************
+-- *                  dt_rifornimento                 *
+-- ****************************************************
+create table dt_rifornimento (
+   id_data_rifornimento DATE not null,
+   prezzo               BIGINT(20),
+   quantitàRifornita    BIGINT(20),
+   constraint PK_dt_rifornimento primary key (id_data_rifornimento)
+);
+
+
+-- ****************************************************
+-- *                   dt_speseMezzo                  *
+-- ****************************************************
+create table dt_speseMezzo (
+   id_speseMezzo          INTEGER not null,
+   mezzo                  VARCHAR(20),
+   id_data_revisione      INTEGER not null,
+   importo_revisione      BIGINT(20),
+   esito_revisione        VARCHAR(22),
+   importo_bollo          BIGINT(20),
+   compagnia_assicurativa VARCHAR(11),
+   importo_assicurazione  BIGINT(20),
+   constraint PK_dt_mezzo_2 primary key (id_speseMezzo)
+);
+
+alter table dt_speseMezzo
+   add constraint data_revisione
+   foreign key (id_data_revisione) references dt_date_rapportino (id);
+
+
+-- ****************************************************
+-- *                     dt_mezzo                     *
+-- ****************************************************
+create table dt_mezzo (
+   id                       INTEGER not null,
+   numero_targa_mezzo       VARCHAR(20),
+   id_data_immatricolazione INTEGER not null,
+   disponibilità            VARCHAR(11),
+   marca                    VARCHAR(8),
+   numero_viaggi            BIGINT(20),
+   chilometri_mezzo         DOUBLE,
+   id_speseMezzo            INTEGER,
+   constraint PK_dt_mezzo primary key (id)
+);
+
+alter table dt_mezzo
+   add constraint data_imm
+   foreign key (id_data_immatricolazione) references dt_date_rapportino (id);
+
+alter table dt_mezzo
+   add constraint mezzo_spese
+   foreign key (id_speseMezzo) references dt_speseMezzo (id_speseMezzo);
+
+
+-- ****************************************************
+-- *                    dt_autista                    *
+-- ****************************************************
+create table dt_autista (
+   id                  INTEGER not null,
+   cf_autista          BIGINT(20),
+   id_data_assunzione  INTEGER,
+   eta_assunzione      INTEGER(11),
+   stato_occupazionale VARCHAR(22),
+   constraint PK_dt_autista primary key (id)
+);
+
+alter table dt_autista
+   add constraint data_ass
+   foreign key (id_data_assunzione) references dt_date_rapportino (id);
+
+
+-- ****************************************************
+-- *              bridge_table_rapportino             *
+-- ****************************************************
+create table bridge_table_rapportino (
+   id_gruppo       INTEGER not null,
+   id_rifornimento DATE,
+   peso            INTEGER,
+   gruppo          VARCHAR,
+   constraint PK_bridge_table primary key (id_gruppo)
+);
+
+alter table bridge_table_rapportino
+   add constraint bridge_rif
+   foreign key (id_rifornimento) references dt_rifornimento (id_data_rifornimento);
+
+
+-- ****************************************************
+-- *                   ft_rapportino                  *
+-- ****************************************************
+create table ft_rapportino (
+   id_autista         INTEGER not null,
+   id_gruppo          INTEGER not null,
+   id_mezzo           INTEGER not null,
+   id_data_partenza   INTEGER not null,
+   numRapportini      INTEGER,
+   durataViaggio      INTEGER(11),
+   chilometriPercorsi INTEGER(11),
+   constraint PK_ft_rapportino primary key (id_autista, id_gruppo, id_mezzo, id_data_partenza)
+);
+
+alter table ft_rapportino
+   add constraint mezzo_rapportino
+   foreign key (id_mezzo) references dt_mezzo (id);
+
+alter table ft_rapportino
+   add constraint data_rapportino
+   foreign key (id_data_partenza) references dt_date_rapportino (id);
+
+alter table ft_rapportino
+   add constraint autista_rapportino
+   foreign key (id_autista) references dt_autista (id);
+
+alter table ft_rapportino
+   add constraint bridge_rapportino
+   foreign key (id_gruppo) references bridge_table_rapportino (id_gruppo);
+
+
